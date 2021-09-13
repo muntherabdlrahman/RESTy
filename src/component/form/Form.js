@@ -57,7 +57,6 @@ function Form(props){
         <>
          <form onSubmit={handleSubmit}>
            <label>
-             <input type="text" onChange={typeYourjson} placeholder="your put and post data " />
            </label>
           <label >
             <span>URL: </span>
@@ -69,6 +68,7 @@ function Form(props){
             <span id="post" onClick={typeYourjson}>POST</span>
             <span id="put" onClick={typeYourjson} >PUT</span>
             <span id="delete" onClick={deleteMethod} >DELETE</span>
+             <input  type="text" onChange={typeYourjson} placeholder="type your put and post dataJosn " />
           </label>
         </form>
 
