@@ -1,7 +1,47 @@
 import React from "react";
+import { useState } from "react";
 import "./form.scss";
 
 function Form(props){
+  const[url, setUrl]=useState("");
+  const[get,setGet]=useState("get");
+  // const[post,setPost]=useState("");
+  // const[put,setPut]=useState("");
+  const[deleteit,setDeleteit]=useState("delete");
+  const[type, setType]=useState("");
+
+  function urlChange(e){
+    e.preventDefault();
+    setUrl(e.target.value);
+
+  }
+
+  function getMethod(e){
+    e.preventDefault();
+    setGet(e.target.id);
+    setUrl(e.target.value)
+  }
+  
+
+  
+  function deleteMethod(e){
+    e.preventDefault();
+    setDeleteit(e.target.id);
+    setUrl(e.target.value)
+
+
+  }
+
+  function typeYourjson(e){
+    e.preventDefault();
+    setType(e.target.value)
+  }
+
+
+
+
+
+
 
     function handleSubmit(e){
         e.preventDefault();
@@ -9,23 +49,26 @@ function Form(props){
             method:'GET',
             url: 'https://pokeapi.co/api/v2/pokemon',
           };
-          props.handleApiCall(formData);
+          props.handleApiCall(formData, type);
 
     }
     
     return(
         <>
          <form onSubmit={handleSubmit}>
+           <label>
+             <input type="text" onChange={typeYourjson} placeholder="your Url " />
+           </label>
           <label >
             <span>URL: </span>
-            <input name='url' type='text' />
-            <button type="submit">GO!</button>
+            <input name='url' type='text' onChange={urlChange}/>
+            <button type="submit"  data-testid="submit">GO!</button>
           </label>
           <label className="methods">
-            <span id="get">GET</span>
-            <span id="post">POST</span>
-            <span id="put">PUT</span>
-            <span id="delete">DELETE</span>
+            <span id="get" onClick={getMethod}>GET</span>
+            <span id="post" onClick={typeYourjson}>POST</span>
+            <span id="put" onClick={typeYourjson} >PUT</span>
+            <span id="delete" onClick={deleteMethod} >DELETE</span>
           </label>
         </form>
 
