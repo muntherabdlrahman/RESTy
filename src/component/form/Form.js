@@ -57,7 +57,7 @@ function Form(props){
         <>
          <form onSubmit={handleSubmit}>
            <label>
-             <input type="text" onChange={typeYourjson} placeholder="your Url " />
+             <input type="text" onChange={typeYourjson} placeholder="your put and post data " />
            </label>
           <label >
             <span>URL: </span>
