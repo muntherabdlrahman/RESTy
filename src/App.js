@@ -1,6 +1,4 @@
-import React from 'react';
-import { useState, useEffect } from "react";
-import axios from 'axios';
+import { React, useState, useEffect } from 'react';
 
 import './app.scss';
 
@@ -11,64 +9,50 @@ import Footer from './component/footer/Footer';
 import Form from './component/form/Form';
 import Results from './component/results/Results';
 
-function App(props) {
-  const [data, setData] = useState(null);
-  const [requestParams, setRequestParams] = useState({});
-  const [body, setbody] = useState("");
 
-  useEffect(() => {
-    try {
-      async function getData() {
-        if (requestParams.url) {
-          const response = await axios({
-            method: requestParams.method,
-            url: requestParams.url,
-            data: body,
-          });
-          setData(response);
 
-        }
-      }
-      getData();
-    } catch (error) {
-      console.log(error.message);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [requestParams]);
+function App() {
+  const [data, setdata] = useState(null);
+  const [requestParams, setrequestParams] = useState({});
 
-  async function callApi(data) {
-    console.log(data);
-    if (data.url !== "") {
-      setRequestParams(data);
-      setbody(data.request);
-    } else {
-      const response = {
-        count: 2,
-        results: [
-          { name: "fake thing 1", url: "http://fakethings.com/1" },
-          { name: "fake thing 2", url: "http://fakethings.com/2" },
-        ],
-      };
-      setData({ response });
-      setRequestParams(data);
-    }
+  async function callApi(requestParams) {
+    setrequestParams(requestParams);
   }
 
+  // console.log('app')
+
+// eslint-disable-next-line react-hooks/exhaustive-deps
+useEffect(async () => {
+    try {
+      const raw = await fetch(requestParams.url);
+      const data = await raw.json();
+      setdata(data);
+    } catch (e) {
+      const data = {
+        count: 2,
+        results: [
+          { name: 'fake thing 1', url: 'http://fakethings.com/1' },
+          { name: 'fake thing 2', url: 'http://fakethings.com/2' },
+        ],
+      };
+      setdata(null);
+    }
+  }, [requestParams]);
+  
+  console.log("data-->",data)
+
+
   return (
-    <React.Fragment>
+    <>
       <Header />
-      <div className="info">
-        <div>
-          <span>Request Method:</span> {requestParams.method}
-        </div>
-        <div>
-          <span>URL:</span> {requestParams.url}
-        </div>
-      </div>
       <Form handleApiCall={callApi} />
+      <div className="request">
+        <div>Request Method: {requestParams.method}</div>
+        <div>URL: {requestParams.url}</div>
+      </div>
       <Results data={data} />
       <Footer />
-    </React.Fragment>
+    </>
   );
 }
 
