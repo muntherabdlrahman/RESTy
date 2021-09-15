@@ -1,80 +1,78 @@
 import React from "react";
 import { useState } from "react";
+import axios from "axios"
+
 import "./form.scss";
 
-function Form(props){
-  const[url, setUrl]=useState("");
-  const[get,setGet]=useState("get");
-  // const[post,setPost]=useState("");
-  // const[put,setPut]=useState("");
-  const[deleteit,setDeleteit]=useState("delete");
-  const[type, setType]=useState("");
+function Form(props) {
+  const [url, setUrl] = useState("https://pokeapi.co/api/v2/pokemon");
+  const [method, setMethod] = useState("get");
+  const [type, setType] = useState({});
+  const [showResult, setShowrResult] = useState("")
 
-  function urlChange(e){
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const formData = await axios({
+        method: method,
+        url: url,
+      });
+      console.log("formData-->", formData)
+      props.handleApiCall(formData, showResult);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+  function urlChange(e) {
     e.preventDefault();
     setUrl(e.target.value);
-
   }
 
-  function getMethod(e){
+  function methodHandler(e) {
     e.preventDefault();
-    setGet(e.target.id);
-    setUrl(e.target.value)
-  }
-  
-
-  
-  function deleteMethod(e){
-    e.preventDefault();
-    setDeleteit(e.target.id);
-    setUrl(e.target.value)
-
-
+    setMethod(e.target.id);
+    console.log('method :-e.target.id---->', e.target.id)
   }
 
-  function typeYourjson(e){
+
+
+  function typeYourjson(e) {
     e.preventDefault();
     setType(e.target.value)
+    setMethod(e.target.id)
+  }
+  function showTheResult(e) {
+    setShowrResult(e.target.value)
   }
 
 
 
+  return (
+    <>
+      <form onSubmit={handleSubmit}>
+        <label >
+          <span>URL: </span>
+          <input name='url' type='text' onChange={urlChange} />
+          <button type="submit" data-testid="submit">GO!</button>
+        </label>
+        <label className="methods">
+          <span id="get" onClick={methodHandler}>GET</span>
+          <span id="post" onClick={typeYourjson}>POST</span>
+          <span id="put" onClick={typeYourjson} >PUT</span>
+          <span id="delete" onClick={methodHandler} >DELETE</span>
+        </label>
+
+        {type && (
+          <input rows="15" cols="35" onChange={showTheResult} placeholder="type your put and post dataJosn "/>
+        )}
+
+      </form>
 
 
+    </>
 
-
-    function handleSubmit(e){
-        e.preventDefault();
-        const formData = {
-            method:'GET',
-            url: 'https://pokeapi.co/api/v2/pokemon',
-          };
-          props.handleApiCall(formData, type);
-
-    }
-    
-    return(
-        <>
-         <form onSubmit={handleSubmit}>
-           <label>
-           </label>
-          <label >
-            <span>URL: </span>
-            <input name='url' type='text' onChange={urlChange}/>
-            <button type="submit"  data-testid="submit">GO!</button>
-          </label>
-          <label className="methods">
-            <span id="get" onClick={getMethod}>GET</span>
-            <span id="post" onClick={typeYourjson}>POST</span>
-            <span id="put" onClick={typeYourjson} >PUT</span>
-            <span id="delete" onClick={deleteMethod} >DELETE</span>
-             <input  type="text" onChange={typeYourjson} placeholder="type your put and post dataJosn " />
-          </label>
-        </form>
-
-        
-        </>
-
-    );
+  );
 }
 export default Form;
