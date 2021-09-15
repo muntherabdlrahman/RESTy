@@ -7,7 +7,7 @@ import "./form.scss";
 function Form(props) {
   const [url, setUrl] = useState("https://pokeapi.co/api/v2/pokemon");
   const [method, setMethod] = useState("get");
-  const [type, setType] = useState({});
+  const [type, setType] = useState(false);
   const [showResult, setShowrResult] = useState("")
 
 
@@ -24,28 +24,42 @@ function Form(props) {
     } catch (error) {
       console.log(error.message);
     }
-  };
+  }
+
   function urlChange(e) {
     e.preventDefault();
     setUrl(e.target.value);
   }
 
-  function methodHandler(e) {
-    e.preventDefault();
-    setMethod(e.target.id);
-    console.log('method :-e.target.id---->', e.target.id)
-  }
-
-
-
-  function typeYourjson(e) {
-    e.preventDefault();
-    setType(e.target.value)
-    setMethod(e.target.id)
-  }
+  // function typeYourjson(e) {
+  //   e.preventDefault();
+  //   setType(e.target.value)
+  //   setMethod(e.target.id)
+  // }
   function showTheResult(e) {
-    setShowrResult(e.target.value)
+    let data = JSON.parse(e.target.value);
+    setShowrResult(data);  
   }
+  function getMethod(e){
+    setMethod("get")
+    setType(false)
+  }
+  function postMethod(e){
+    setMethod("post");
+    setType(true)
+  }
+  function putMethod(e){
+    setMethod("put");
+    setType(true)
+
+  }
+  function deleteMethod(e){
+    setMethod("delete");
+    setType(false)
+  }
+
+
+
 
 
 
@@ -58,10 +72,10 @@ function Form(props) {
           <button type="submit" data-testid="submit">GO!</button>
         </label>
         <label className="methods">
-          <span id="get" onClick={methodHandler}>GET</span>
-          <span id="post" onClick={typeYourjson}>POST</span>
-          <span id="put" onClick={typeYourjson} >PUT</span>
-          <span id="delete" onClick={methodHandler} >DELETE</span>
+          <span id="get" onClick={getMethod}>GET</span>
+          <span id="post" onClick={postMethod}>POST</span>
+          <span id="put" onClick={putMethod} >PUT</span>
+          <span id="delete" onClick={deleteMethod} >DELETE</span>
         </label>
 
         {type && (

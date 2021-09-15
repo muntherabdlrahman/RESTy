@@ -1,17 +1,24 @@
-import React from 'react';
-import JSONPretty from 'react-json-pretty';
-import 'react-json-pretty/themes/monikai.css';
+import React from "react";
+import ReactJson from "react-json-pretty";
+import Loading from "../loading/Loading";
 
-function Results(props) {
-
+const Results = (props) => {
   return (
-    <section data-testid="result"  >
-      {props.data &&
-        <JSONPretty data={props.data} ></JSONPretty>
-      }
-    </section>
+    <div className="result-container">
+      <div className="result">
+        {props.data ? (
+          <div className="result-titles">
+            <h2>HEADERS:</h2>
+            <ReactJson src={props.data.headers} />
+            <h2>DATA:</h2>
+            <ReactJson src={props.data.data} />
+          </div>
+        ) : (
+          <Loading />
+        )}
+      </div>
+    </div>
   );
-
-}
+};
 
 export default Results;
