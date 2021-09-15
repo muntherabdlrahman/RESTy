@@ -1,13 +1,17 @@
 import React from 'react';
+import JSONPretty from 'react-json-pretty';
+import 'react-json-pretty/themes/monikai.css';
 
-class Results extends React.Component {
-  render() {
-    return (
-      <section>
-        <pre>{this.props.data ? JSON.stringify(this.props.data, undefined, 2) : null}</pre>
-      </section>
-    );
-  }
+function Results(props) {
+
+  return (
+    <section data-testid="result"  >
+      {props.data &&
+        <JSONPretty data={props.data} ></JSONPretty>
+      }
+    </section>
+  );
+
 }
 
 export default Results;
